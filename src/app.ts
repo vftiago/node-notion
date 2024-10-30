@@ -6,11 +6,12 @@ import morgan from "morgan";
 import helmet from "helmet";
 import cors from "cors";
 
-import * as middlewares from "./middlewares";
+import { notFound, errorHandler } from "./middlewares";
 import api from "./api";
 
 import { MAX_REQUESTS_PER_HOUR, MILLISECONDS_IN_HOUR } from "./constants";
 import MessageResponse from "./interfaces/MessageResponse";
+import { env } from "./env";
 
 const app = express();
 
@@ -33,9 +34,9 @@ app.get<object, MessageResponse>("/", (_req, res) => {
   });
 });
 
-app.use("/api/v1", api);
+app.use(env.API_PREFIX, api);
 
-app.use(middlewares.notFound);
-app.use(middlewares.errorHandler);
+app.use(notFound);
+app.use(errorHandler);
 
 export default app;
